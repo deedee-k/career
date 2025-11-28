@@ -24,7 +24,13 @@ export default function AdminDashboard() {
   const [newCourse, setNewCourse] = useState("");
   const [minGPA, setMinGPA] = useState("");
 
-  // Load all data on mount
+  // === UPDATE STATES ===
+  const [editInstitutionId, setEditInstitutionId] = useState(null);
+  const [editInstitutionName, setEditInstitutionName] = useState("");
+
+  const [editFacultyId, setEditFacultyId] = useState(null);
+  const [editFacultyName, setEditFacultyName] = useState("");
+
   useEffect(() => {
     loadInstitutions();
     loadFaculties();
@@ -33,7 +39,7 @@ export default function AdminDashboard() {
     loadApplications();
   }, []);
 
-  // 🔹 Load institutions
+  // 🏫 Load Institutions
   const loadInstitutions = async () => {
     const snap = await getDocs(collection(db, "users"));
     const list = snap.docs
@@ -42,70 +48,125 @@ export default function AdminDashboard() {
     setInstitutions(list);
   };
 
-  // 🔹 Load faculties
+  // 🎓 Load Faculties
   const loadFaculties = async () => {
     const snap = await getDocs(collection(db, "faculties"));
     setFaculties(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   };
 
-  // 🔹 Load courses
+  // 📘 Load Courses
   const loadCourses = async () => {
     const snap = await getDocs(collection(db, "courses"));
     setCourses(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   };
 
-  // 🔹 Load all users
   const loadUsers = async () => {
     const snap = await getDocs(collection(db, "users"));
     setUsers(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   };
 
-  // 🔹 Load applications
   const loadApplications = async () => {
     const snap = await getDocs(collection(db, "applications"));
     setApplications(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   };
 
-  // 🔹 Add institution (creates an account entry)
+  // ➕ Add Institution
   const addInstitution = async (e) => {
     e.preventDefault();
     if (!newInstitution.trim()) return;
+
     await addDoc(collection(db, "users"), {
       name: newInstitution.trim(),
       email: `${newInstitution.toLowerCase().replace(/\s/g, "")}@mail.com`,
       role: "institution",
       createdAt: new Date().toISOString(),
     });
+
     setNewInstitution("");
     loadInstitutions();
     alert("✅ Institution added successfully!");
   };
 
+  // 🗑 Delete Institution
   const deleteInstitution = async (id) => {
     await deleteDoc(doc(db, "users", id));
     loadInstitutions();
   };
 
-  // 🔹 Add Faculty
+  // ✏ Start Editing Institution
+  const startEditingInstitution = (inst) => {
+    setEditInstitutionId(inst.id);
+    setEditInstitutionName(inst.name);
+  };
+
+  // 💾 Save Institution Update
+  const saveInstitutionUpdate = async () => {
+    if (!editInstitutionName.trim()) return;
+    const ref = doc(db, "users", editInstitutionId);
+
+    await updateDoc(ref, {
+      name: editInstitutionName.trim(),
+    });
+
+    setEditInstitutionId(null);
+    setEditInstitutionName("");
+    loadInstitutions();
+    alert("✅ Institution updated!");
+  };
+
+  // ➕ Add Faculty
   const addFaculty = async (e) => {
     e.preventDefault();
     if (!selectedInstitution || !newFaculty.trim()) return;
+
     const inst = institutions.find((i) => i.id === selectedInstitution);
+
     await addDoc(collection(db, "faculties"), {
       name: newFaculty,
       institutionId: inst.id,
       institutionName: inst.name,
       createdAt: new Date().toISOString(),
     });
+
     setNewFaculty("");
     loadFaculties();
   };
 
-  // 🔹 Add Course
+  // 🗑 Delete Faculty
+  const deleteFaculty = async (id) => {
+    await deleteDoc(doc(db, "faculties", id));
+    loadFaculties();
+  };
+
+  // ✏ Start Editing Faculty
+  const startEditingFaculty = (f) => {
+    setEditFacultyId(f.id);
+    setEditFacultyName(f.name);
+  };
+
+  // 💾 Save Faculty Update
+  const saveFacultyUpdate = async () => {
+    if (!editFacultyName.trim()) return;
+
+    const ref = doc(db, "faculties", editFacultyId);
+
+    await updateDoc(ref, {
+      name: editFacultyName.trim(),
+    });
+
+    setEditFacultyId(null);
+    setEditFacultyName("");
+    loadFaculties();
+    alert("✅ Faculty updated!");
+  };
+
+  // ➕ Add Course
   const addCourse = async (e) => {
     e.preventDefault();
     if (!selectedInstitution || !newCourse.trim()) return;
+
     const inst = institutions.find((i) => i.id === selectedInstitution);
+
     await addDoc(collection(db, "courses"), {
       name: newCourse,
       institutionId: inst.id,
@@ -113,6 +174,7 @@ export default function AdminDashboard() {
       minGPA: parseFloat(minGPA) || 2.5,
       createdAt: new Date().toISOString(),
     });
+
     setNewCourse("");
     setMinGPA("");
     loadCourses();
@@ -123,23 +185,19 @@ export default function AdminDashboard() {
     loadCourses();
   };
 
-  // 🔹 Manage user accounts
   const updateUserStatus = async (id, status) => {
-    const ref = doc(db, "users", id);
-    await updateDoc(ref, { status });
-    alert(`✅ User ${status}!`);
+    await updateDoc(doc(db, "users", id), { status });
     loadUsers();
   };
 
   const deleteUser = async (id) => {
     await deleteDoc(doc(db, "users", id));
-    alert("🗑 User deleted!");
     loadUsers();
   };
 
-  // 🔹 Publish admissions (move Admitted apps → admissions)
   const publishAdmissions = async () => {
     const admitted = applications.filter((a) => a.status === "Admitted");
+
     for (const app of admitted) {
       await setDoc(doc(db, "admissions", `${app.studentId}-${app.institution}`), {
         studentId: app.studentId,
@@ -148,19 +206,20 @@ export default function AdminDashboard() {
         date: new Date().toISOString(),
       });
     }
+
     alert("✅ Admissions published successfully!");
   };
 
-  // 🔹 Quick statistics
   const countUsers = (role) => users.filter((u) => u.role === role).length;
 
   return (
     <div className="admin-page">
       <Navbar title="Admin Dashboard" />
+
       <div className="admin-content">
         <h2>🛠️ System Administration</h2>
 
-        {/* OVERVIEW */}
+        {/* SUMMARY */}
         <section>
           <h3>📊 System Summary</h3>
           <div className="stats">
@@ -171,9 +230,10 @@ export default function AdminDashboard() {
           </div>
         </section>
 
-        {/* INSTITUTION MANAGEMENT */}
+        {/* INSTITUTIONS */}
         <section>
           <h3>🏫 Manage Institutions</h3>
+
           <form onSubmit={addInstitution} className="form-section">
             <input
               placeholder="Institution Name"
@@ -182,19 +242,35 @@ export default function AdminDashboard() {
             />
             <button>Add Institution</button>
           </form>
+
           <ul>
             {institutions.map((i) => (
               <li key={i.id}>
-                {i.name || i.email}{" "}
-                <button onClick={() => deleteInstitution(i.id)}>🗑</button>
+                {editInstitutionId === i.id ? (
+                  <>
+                    <input
+                      value={editInstitutionName}
+                      onChange={(e) => setEditInstitutionName(e.target.value)}
+                    />
+                    <button onClick={saveInstitutionUpdate}>💾 Save</button>
+                    <button onClick={() => setEditInstitutionId(null)}>✖ Cancel</button>
+                  </>
+                ) : (
+                  <>
+                    {i.name}
+                    <button onClick={() => startEditingInstitution(i)}>✏ Edit</button>
+                    <button onClick={() => deleteInstitution(i.id)}>🗑 Delete</button>
+                  </>
+                )}
               </li>
             ))}
           </ul>
         </section>
 
-        {/* FACULTIES & COURSES */}
+        {/* FACULTIES */}
         <section>
-          <h3>🏢 Add Faculties & Courses</h3>
+          <h3>🏛 Faculties</h3>
+
           <form onSubmit={addFaculty} className="form-section">
             <select
               value={selectedInstitution}
@@ -207,13 +283,43 @@ export default function AdminDashboard() {
                 </option>
               ))}
             </select>
+
             <input
               placeholder="Faculty Name"
               value={newFaculty}
               onChange={(e) => setNewFaculty(e.target.value)}
             />
+
             <button>Add Faculty</button>
           </form>
+
+          <ul>
+            {faculties.map((f) => (
+              <li key={f.id}>
+                {editFacultyId === f.id ? (
+                  <>
+                    <input
+                      value={editFacultyName}
+                      onChange={(e) => setEditFacultyName(e.target.value)}
+                    />
+                    <button onClick={saveFacultyUpdate}>💾 Save</button>
+                    <button onClick={() => setEditFacultyId(null)}>✖ Cancel</button>
+                  </>
+                ) : (
+                  <>
+                    {f.name} ({f.institutionName})
+                    <button onClick={() => startEditingFaculty(f)}>✏ Edit</button>
+                    <button onClick={() => deleteFaculty(f.id)}>🗑 Delete</button>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* COURSES */}
+        <section>
+          <h3>📘 Courses</h3>
 
           <form onSubmit={addCourse} className="form-section">
             <select
@@ -227,44 +333,33 @@ export default function AdminDashboard() {
                 </option>
               ))}
             </select>
+
             <input
               placeholder="Course Name"
               value={newCourse}
               onChange={(e) => setNewCourse(e.target.value)}
             />
+
             <input
-              placeholder="Min GPA (default 2.5)"
+              placeholder="Minimum GPA"
               value={minGPA}
               onChange={(e) => setMinGPA(e.target.value)}
             />
+
             <button>Add Course</button>
           </form>
 
           <ul>
             {courses.map((c) => (
               <li key={c.id}>
-                {c.name} ({c.institutionName}) — GPA ≥ {c.minGPA}{" "}
+                {c.name} ({c.institutionName}) — GPA ≥ {c.minGPA}
                 <button onClick={() => deleteCourse(c.id)}>🗑</button>
               </li>
             ))}
           </ul>
         </section>
 
-        {/* FACULTY LIST */}
-<section>
-  <h3>🏛 Faculties</h3>
-  <ul>
-    {faculties.map((f) => (
-      <li key={f.id}>
-        {f.name} ({f.institutionName})
-      </li>
-    ))}
-  </ul>
-</section>
-
-        
-
-        {/* MANAGE USERS */}
+        {/* USERS */}
         <section>
           <h3>👥 Manage Users</h3>
           <table className="data-table">
@@ -285,8 +380,12 @@ export default function AdminDashboard() {
                   <td>
                     {u.role !== "admin" && (
                       <>
-                        <button onClick={() => updateUserStatus(u.id, "approved")}>Approve</button>
-                        <button onClick={() => updateUserStatus(u.id, "suspended")}>Suspend</button>
+                        <button onClick={() => updateUserStatus(u.id, "approved")}>
+                          Approve
+                        </button>
+                        <button onClick={() => updateUserStatus(u.id, "suspended")}>
+                          Suspend
+                        </button>
                         <button onClick={() => deleteUser(u.id)}>Delete</button>
                       </>
                     )}
@@ -297,10 +396,10 @@ export default function AdminDashboard() {
           </table>
         </section>
 
-        {/* PUBLISH ADMISSIONS */}
+        {/* ADMISSIONS */}
         <section>
           <h3>📢 Publish Admissions</h3>
-          <button onClick={publishAdmissions}>Publish System Admissions</button>
+          <button onClick={publishAdmissions}>Publish</button>
         </section>
       </div>
     </div>

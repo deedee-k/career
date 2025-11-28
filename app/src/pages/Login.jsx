@@ -51,7 +51,7 @@ export default function Login() {
   return (
     <div className="auth-container">
       <div className="auth-box login-box">
-        <h2>Sign In</h2>
+        <h2>Welcome</h2>
         <form onSubmit={handleLogin} className="login-form">
           <input
             type="email"

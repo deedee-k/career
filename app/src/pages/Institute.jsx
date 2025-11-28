@@ -14,6 +14,8 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "../firebase";
 
+
+
 export default function InstitutionDashboard() {
   const [institution, setInstitution] = useState(null);
   const [faculties, setFaculties] = useState([]);
@@ -215,61 +217,78 @@ export default function InstitutionDashboard() {
 
         {/* FACULTIES */}
         <section>
-          <h3>📘 Manage Faculties</h3>
-          <form onSubmit={addFaculty} className="form-section">
-            <input
-              placeholder="Faculty Name"
-              value={newFaculty}
-              onChange={(e) => setNewFaculty(e.target.value)}
-            />
-            <button>Add Faculty</button>
-          </form>
-          <ul>
-            {faculties.map((f) => (
-              <li key={f.id}>
-                {f.name}{" "}
-                <button onClick={() => deleteFaculty(f.id)}>🗑</button>
-              </li>
-            ))}
-          </ul>
-        </section>
+  <h3>📘 Manage Faculties</h3>
 
-        {/* COURSES */}
-        <section>
-          <h3>📚 Manage Courses</h3>
-          <form onSubmit={addCourse} className="form-section">
-            <select
-              value={selectedFaculty}
-              onChange={(e) => setSelectedFaculty(e.target.value)}
-            >
-              <option value="">Select Faculty</option>
-              {faculties.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.name}
-                </option>
-              ))}
-            </select>
-            <input
-              placeholder="Course Name"
-              value={newCourse}
-              onChange={(e) => setNewCourse(e.target.value)}
-            />
-            <input
-              placeholder="Min GPA (default 2.5)"
-              value={minGPA}
-              onChange={(e) => setMinGPA(e.target.value)}
-            />
-            <button>Add Course</button>
-          </form>
-          <ul>
-            {courses.map((c) => (
-              <li key={c.id}>
-                {c.name} — GPA ≥ {c.minGPA}{" "}
-                <button onClick={() => deleteCourse(c.id)}>🗑</button>
-              </li>
-            ))}
-          </ul>
-        </section>
+  <form onSubmit={addFaculty} className="form-section">
+    <input
+      placeholder="Faculty Name"
+      value={newFaculty}
+      onChange={(e) => setNewFaculty(e.target.value)}
+    />
+    <button className="btn-primary">Add Faculty</button>
+  </form>
+
+  <div className="card-list">
+    {faculties.map((f) => (
+      <div className="card-item" key={f.id}>
+        <span className="card-title">{f.name}</span>
+        <div className="card-actions">
+          <button className="btn-delete" onClick={() => deleteFaculty(f.id)}>
+            🗑
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+{/* COURSES */}
+<section>
+  <h3>📚 Manage Courses</h3>
+
+  <form onSubmit={addCourse} className="form-section">
+    <select
+      value={selectedFaculty}
+      onChange={(e) => setSelectedFaculty(e.target.value)}
+    >
+      <option value="">Select Faculty</option>
+      {faculties.map((f) => (
+        <option key={f.id} value={f.id}>
+          {f.name}
+        </option>
+      ))}
+    </select>
+
+    <input
+      placeholder="Course Name"
+      value={newCourse}
+      onChange={(e) => setNewCourse(e.target.value)}
+    />
+
+    <input
+      placeholder="Min GPA (default 2.5)"
+      value={minGPA}
+      onChange={(e) => setMinGPA(e.target.value)}
+    />
+
+    <button className="btn-primary">Add Course</button>
+  </form>
+
+  <div className="card-list">
+    {courses.map((c) => (
+      <div className="card-item" key={c.id}>
+        <span className="card-title">
+          {c.name} — GPA ≥ {c.minGPA}
+        </span>
+        <div className="card-actions">
+          <button className="btn-delete" onClick={() => deleteCourse(c.id)}>
+            🗑
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
         {/* APPLICATIONS */}
         <section>

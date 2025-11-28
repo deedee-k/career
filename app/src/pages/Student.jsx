@@ -67,6 +67,7 @@ export default function StudentDashboard() {
         email: auth.currentUser.email,
         role: "student",
         createdAt: new Date().toISOString(),
+        experienceYears: 0, // NEW
       };
       await setDoc(refUser, newProfile);
       setProfile(newProfile);
@@ -140,6 +141,7 @@ export default function StudentDashboard() {
       alert("Please select an institution and at least one course.");
       return;
     }
+
     if (selectedCourses.length > 2) {
       alert("⚠️ You can only apply for up to 2 courses per institution.");
       return;
@@ -163,20 +165,16 @@ export default function StudentDashboard() {
         return;
       }
     }
-    await addDoc(collection(db, "jobApplications"), {
-  jobId: job.id,
-  companyId: job.companyId,               // ✅ Add this
-  companyName: job.companyName,           // ✅ Add this
-  studentId: user.uid,
-  studentName: profile.name || user.email,
-  studentGPA: profile.gpa || "",
-  studentSkills: profile.skills || "",
-  status: "Applied",
-  date: new Date().toISOString(),
-});
 
-
-
+    // ✅ Save the course application correctly
+    await addDoc(collection(db, "applications"), {
+      studentId: user.uid,
+      studentName: profile.name || user.email,
+      institution: selectedInstitution,
+      courses: selectedCourses,
+      status: "Pending",
+      date: new Date().toISOString(),
+    });
 
     alert("✅ Application submitted!");
     setSelectedCourses([]);
@@ -192,8 +190,6 @@ export default function StudentDashboard() {
     alert(`🎓 You confirmed admission at ${chosen.institution}`);
     await loadAdmissions(user.uid);
   };
-
-
 
   // Prevent render crash while loading
   if (!user) return <p>Loading student dashboard...</p>;
@@ -223,6 +219,18 @@ export default function StudentDashboard() {
               value={profile.skills || ""}
               onChange={(e) => setProfile({ ...profile, skills: e.target.value })}
             />
+            <input
+              placeholder="Work Experience (years)"
+              type="number"
+              min="0"
+              value={profile.experienceYears || ""}
+              onChange={(e) =>
+                setProfile({
+                  ...profile,
+                  experienceYears: parseFloat(e.target.value),
+                })
+              }
+            />
             <button>Update</button>
           </form>
 
@@ -237,10 +245,14 @@ export default function StudentDashboard() {
         {/* APPLY FOR COURSES */}
         <section>
           <h3>📘 Apply for Courses</h3>
+
           <form onSubmit={applyForCourses} className="form-section">
             <select
               value={selectedInstitution}
-              onChange={(e) => setSelectedInstitution(e.target.value)}
+              onChange={(e) => {
+                setSelectedInstitution(e.target.value);
+                setSelectedCourses([]); // reset selected courses
+              }}
               required
             >
               <option value="">Select Institution</option>
@@ -251,27 +263,35 @@ export default function StudentDashboard() {
               ))}
             </select>
 
-            <select
-              multiple
-              value={selectedCourses}
-              onChange={(e) =>
-                setSelectedCourses(
-                  Array.from(e.target.selectedOptions, (opt) => opt.value)
-                )
-              }
-            >
+            <div className="course-card-container">
               {courses
                 .filter((c) => c.institutionName === selectedInstitution)
-                .map((c) => (
-                  <option key={c.id} value={c.name}>
-                    {c.name} (Min GPA: {c.minGPA || 2.5})
-                  </option>
-                ))}
-            </select>
+                .map((c) => {
+                  const selected = selectedCourses.includes(c.name);
+                  return (
+                    <div
+                      key={c.id}
+                      className={`course-card ${selected ? "selected" : ""}`}
+                      onClick={() => {
+                        if (selected) {
+                          setSelectedCourses(selectedCourses.filter((x) => x !== c.name));
+                        } else {
+                          setSelectedCourses([...selectedCourses, c.name]);
+                        }
+                      }}
+                    >
+                      <h4>{c.name}</h4>
+                      <p className="gpa">Min GPA: {c.minGPA || 2.5}</p>
+                      {c.description && <p className="desc">{c.description}</p>}
+                    </div>
+                  );
+                })}
+            </div>
+
             <button>Apply</button>
           </form>
 
-          <ul>
+          <ul className="course-app-list">
             {applications.map((a) => (
               <li key={a.id}>
                 <b>{a.institution}</b> —{" "}
@@ -292,9 +312,7 @@ export default function StudentDashboard() {
               {admissions.map((a) => (
                 <li key={a.id}>
                   Admitted at <b>{a.institution}</b> —{" "}
-                  {Array.isArray(a.courses)
-                    ? a.courses.join(", ")
-                    : a.courses}
+                  {Array.isArray(a.courses) ? a.courses.join(", ") : a.courses}
                   <button onClick={() => confirmAdmission(a)}>Confirm</button>
                 </li>
               ))}
@@ -303,56 +321,76 @@ export default function StudentDashboard() {
         </section>
 
         {/* JOBS */}
-        {/* JOBS */}
-<section>
-  <h3>💼 Job Opportunities</h3>
-  {jobs.length === 0 ? (
-    <p>No job postings yet.</p>
-  ) : (
-    <ul>
-      {jobs.map((job) => {
-        const qualifies =
-          parseFloat(profile.gpa || 0) >= (job.minGPA || 2.5) &&
-          (!job.requiredSkills ||
-            job.requiredSkills.some((skill) =>
-              (profile.skills || "")
-                .toLowerCase()
-                .includes(skill.toLowerCase())
-            ));
+        <section>
+          <h3>💼 Job Opportunities</h3>
 
-        return (
-          <li key={job.id}>
-            <b>{job.title}</b> at {job.companyName} — Min GPA: {job.minGPA}
-            <br />
-            <i>{job.description}</i>
-            <br />
-            {qualifies ? (
-              <button
-                onClick={async () => {
-                  await addDoc(collection(db, "jobApplications"), {
-                    jobId: job.id,
-                    studentId: user.uid,
-                    studentName: profile.name || user.email,
-                    status: "Applied",
-                    date: new Date().toISOString(),
-                  });
-                  alert("✅ Applied successfully!");
-                }}
-              >
-                Apply
-              </button>
-            ) : (
-              <span>❌ Not qualified</span>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  )}
-</section>
+          {jobs.length === 0 ? (
+            <p>No job postings yet.</p>
+          ) : (
+            <ul className="job-list">
+              {jobs.map((job) => {
+                const qualifies =
+                  parseFloat(profile.gpa || 0) >= (job.minGPA || 2.5) &&
+                  (profile.experienceYears || 0) >= (job.minExperience || 0) &&
+                  (!job.requiredSkills ||
+                    job.requiredSkills.some((skill) =>
+                      (profile.skills || "")
+                        .toLowerCase()
+                        .includes(skill.toLowerCase())
+                    ));
 
-        
-        
+                return (
+                  <li key={job.id} className="job-card">
+                    <b className="job-title">{job.title}</b> at {job.companyName}
+                    <br />
+                    <i className="job-desc">{job.description}</i>
+
+                    <div className="qual-box">
+                      <h4>Qualifications</h4>
+                      <p>
+                        <span className="label">Min GPA:</span>{" "}
+                        <span className="value">{job.minGPA || 2.5}</span>
+                      </p>
+                      <p>
+                        <span className="label">Min Experience:</span>{" "}
+                        <span className="value">{job.minExperience || 0} years</span>
+                      </p>
+
+                      {job.requiredSkills && job.requiredSkills.length > 0 && (
+                        <div className="skill-list">
+                          {job.requiredSkills.map((skill, idx) => (
+                            <span key={idx} className="skill-tag">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {qualifies ? (
+                      <button
+                        onClick={async () => {
+                          await addDoc(collection(db, "jobApplications"), {
+                            jobId: job.id,
+                            studentId: user.uid,
+                            studentName: profile.name || user.email,
+                            status: "Applied",
+                            date: new Date().toISOString(),
+                          });
+                          alert("✅ Applied successfully!");
+                        }}
+                      >
+                        Apply
+                      </button>
+                    ) : (
+                      <span className="not-qualified">❌ Not qualified</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
       </div>
     </div>
   );
