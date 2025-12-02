@@ -13,8 +13,11 @@ export default function Navbar({ title }) {
 
   return (
     <nav className="navbar">
-      <h3>{title}</h3>
-      <button onClick={handleLogout}>Logout</button>
+      <h3 className="nav-title">{title}</h3>
+
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
     </nav>
   );
 }
