@@ -11,7 +11,6 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import "../styles/AdminSidebar.css";
 
 // Icons
 const HomeIcon = () => <span>🏠</span>;

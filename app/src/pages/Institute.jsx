@@ -14,7 +14,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import "../styles/Institution.css";
+
 
 // Icons
 const HomeIcon = () => <span className="nav-icon">🏠</span>;

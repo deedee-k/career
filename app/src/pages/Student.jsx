@@ -16,7 +16,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { sendEmailVerification } from "firebase/auth";
-import "../styles/Student.css";
+
 
 // Icons
 const HomeIcon = () => <span className="nav-icon">🏠</span>;

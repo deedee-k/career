@@ -1,0 +1,784 @@
+/* ===== MOBILE RESPONSIVE DESIGN ===== */
+
+/* Base Mobile Styles */
+@media (max-width: 768px) {
+  
+  /* Global Reset for Mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  
+  /* Dashboard Pages Mobile Layout */
+  .admin-page,
+  .company-page,
+  .institution-page,
+  .student-page {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Sidebars - Mobile */
+  .admin-sidebar,
+  .company-sidebar,
+  .institution-sidebar,
+  .student-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 15px 20px;
+    border-right: none;
+    border-bottom: 1px solid rgba(122, 92, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .admin-logo,
+  .company-logo,
+  .institution-logo,
+  .student-logo {
+    padding: 0 0 15px;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .admin-logo h2,
+  .company-logo h2,
+  .institution-logo h2,
+  .student-logo h2 {
+    font-size: 1.4rem;
+    justify-content: flex-start;
+  }
+  
+  .admin-nav,
+  .company-nav,
+  .institution-nav,
+  .student-nav {
+    padding: 0;
+  }
+  
+  .admin-nav ul,
+  .company-nav ul,
+  .institution-nav ul,
+  .student-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .admin-nav li,
+  .company-nav li,
+  .institution-nav li,
+  .student-nav li {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 45%;
+  }
+  
+  .nav-item {
+    padding: 12px 15px;
+    font-size: 0.85rem;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .nav-icon {
+    margin-right: 8px;
+    font-size: 1rem;
+  }
+  
+  .logout-section {
+    padding: 15px 0;
+    margin-top: 15px;
+  }
+  
+  .logout-btn {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  /* Main Content - Mobile */
+  .admin-content,
+  .company-content,
+  .institution-content,
+  .student-content {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 20px 15px;
+    min-height: calc(100vh - 200px);
+  }
+  
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+  }
+  
+  .content-header h1 {
+    font-size: 1.6rem;
+    line-height: 1.3;
+  }
+  
+  .header-actions,
+  .student-stats,
+  .company-stats {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .header-btn,
+  .stat-pill {
+    flex: 1;
+    min-width: calc(50% - 5px);
+    text-align: center;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+  
+  /* Stats Grid - Mobile */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .stat-card {
+    padding: 20px 15px;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
+  }
+  
+  /* Dashboard Cards - Mobile */
+  .dashboard-card {
+    padding: 25px 20px;
+    margin-bottom: 25px;
+    border-radius: 18px;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+  }
+  
+  /* Forms - Mobile */
+  .modern-form {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 14px 16px;
+    font-size: 1rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .submit-btn,
+  .cancel-btn {
+    padding: 14px;
+    width: 100%;
+  }
+  
+  /* Quick Actions - Mobile */
+  .quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .action-card {
+    padding: 20px 15px;
+  }
+  
+  .action-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .action-label {
+    font-size: 0.9rem;
+  }
+  
+  /* Lists - Mobile */
+  .list-items {
+    gap: 12px;
+  }
+  
+  .list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .item-actions {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .edit-btn,
+  .delete-btn,
+  .admit-btn,
+  .reject-btn {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Tables - Mobile */
+  .applications-table,
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.85rem;
+  }
+  
+  .applications-table th,
+  .data-table th,
+  .applications-table td,
+  .data-table td {
+    padding: 12px 15px;
+    min-width: 120px;
+  }
+  
+  .table-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  /* Grid Layouts - Mobile */
+  .jobs-grid,
+  .courses-grid,
+  .admissions-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .job-card,
+  .course-card,
+  .admission-card {
+    padding: 20px;
+  }
+  
+  .job-title,
+  .course-card h4,
+  .admission-card h3 {
+    font-size: 1.1rem;
+  }
+  
+  /* Empty States - Mobile */
+  .empty-state {
+    padding: 40px 25px;
+  }
+  
+  .empty-icon {
+    font-size: 3rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.3rem;
+  }
+  
+  .empty-state p {
+    font-size: 0.95rem;
+  }
+  
+  .cta-button {
+    padding: 14px 25px;
+    font-size: 0.95rem;
+  }
+  
+  /* Authentication Pages - Mobile */
+  .auth-container {
+    padding: 15px;
+    min-height: 100vh;
+  }
+  
+  .auth-box {
+    padding: 30px 25px;
+    max-width: 100%;
+    margin: 20px auto;
+  }
+  
+  .auth-box h2 {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+  }
+  
+  .register-form,
+  .login-form {
+    gap: 15px;
+  }
+  
+  .register-form input,
+  .login-form input,
+  .register-form select {
+    padding: 14px 16px;
+    font-size: 1rem;
+  }
+  
+  .role-icons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .role-icon {
+    min-height: 70px;
+    padding: 12px;
+  }
+  
+  .role-icon span:first-child {
+    font-size: 1.2rem;
+  }
+  
+  .role-icon span:last-child {
+    font-size: 0.85rem;
+  }
+  
+  /* Upload Section - Mobile */
+  .upload-section {
+    padding: 20px;
+  }
+  
+  /* Applications List - Mobile */
+  .applications-list {
+    gap: 12px;
+  }
+  
+  .application-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  /* Status Badges - Mobile */
+  .status-badge,
+  .qualification-badge {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  
+  /* Mobile Menu Toggle (if needed) */
+  .mobile-menu-toggle {
+    display: block;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1001;
+    background: rgba(28, 28, 43, 0.9);
+    border: 1px solid rgba(122, 92, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Hide scrollbars but keep functionality */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(15, 15, 26, 0.1);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(122, 92, 255, 0.3);
+    border-radius: 2px;
+  }
+}
+
+/* Small Mobile Devices (up to 480px) */
+@media (max-width: 480px) {
+  
+  /* Further adjustments for very small screens */
+  .content-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-actions,
+  .student-stats {
+    flex-direction: column;
+  }
+  
+  .header-btn,
+  .stat-pill {
+    min-width: 100%;
+  }
+  
+  /* Navigation - Small Mobile */
+  .admin-nav ul,
+  .company-nav ul,
+  .institution-nav ul,
+  .student-nav ul {
+    flex-direction: column;
+  }
+  
+  .admin-nav li,
+  .company-nav li,
+  .institution-nav li,
+  .student-nav li {
+    min-width: 100%;
+  }
+  
+  /* Authentication - Small Mobile */
+  .auth-box {
+    padding: 25px 20px;
+  }
+  
+  .auth-box h2 {
+    font-size: 1.4rem;
+  }
+  
+  .role-icons {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Forms - Small Mobile */
+  .form-section {
+    padding: 20px;
+  }
+  
+  /* Table Cells - Small Mobile */
+  .applications-table td,
+  .data-table td {
+    min-width: 100px;
+    padding: 10px 12px;
+  }
+  
+  /* Job Cards - Small Mobile */
+  .job-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .apply-btn,
+  .not-qualified {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Mobile Optimized Typography */
+  body {
+    font-size: 14px;
+  }
+  
+  h1, h2, h3 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Tablet Devices (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  
+  .admin-sidebar,
+  .company-sidebar,
+  .institution-sidebar,
+  .student-sidebar {
+    width: 250px;
+  }
+  
+  .admin-content,
+  .company-content,
+  .institution-content,
+  .student-content {
+    margin-left: 250px;
+    max-width: calc(100vw - 250px);
+    padding: 30px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .jobs-grid,
+  .courses-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Landscape Mode Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  
+  .admin-sidebar,
+  .company-sidebar,
+  .institution-sidebar,
+  .student-sidebar {
+    max-height: 60vh;
+  }
+  
+  .admin-content,
+  .company-content,
+  .institution-content,
+  .student-content {
+    min-height: calc(100vh - 150px);
+  }
+  
+  .auth-container {
+    padding: 10px;
+  }
+  
+  .auth-box {
+    margin: 10px auto;
+    max-width: 90%;
+  }
+}
+
+/* High DPI Mobile Devices */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  
+  .nav-item,
+  .logout-btn,
+  .header-btn,
+  .submit-btn,
+  .action-btn {
+    border-width: 0.5px;
+  }
+  
+  .dashboard-card,
+  .auth-box {
+    box-shadow: 
+      0 10px 25px rgba(0, 0, 0, 0.15),
+      0 0 0 0.5px rgba(255, 255, 255, 0.05) inset;
+  }
+}
+
+/* Safe Area Insets for Notched Phones */
+@supports (padding: max(0px)) {
+  
+  .admin-content,
+  .company-content,
+  .institution-content,
+  .student-content,
+  .auth-container {
+    padding-left: max(15px, env(safe-area-inset-left));
+    padding-right: max(15px, env(safe-area-inset-right));
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
+  }
+  
+  .admin-sidebar,
+  .company-sidebar,
+  .institution-sidebar,
+  .student-sidebar {
+    padding-top: max(15px, env(safe-area-inset-top));
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  
+  /* Larger touch targets */
+  .nav-item,
+  .logout-btn,
+  .header-btn,
+  .submit-btn,
+  .cancel-btn,
+  .action-btn,
+  .edit-btn,
+  .delete-btn,
+  .admit-btn,
+  .reject-btn,
+  .apply-btn,
+  .confirm-btn,
+  .role-icon {
+    min-height: 44px;
+  }
+  
+  input,
+  select,
+  button {
+    min-height: 44px;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .nav-item:hover,
+  .logout-btn:hover,
+  .header-btn:hover,
+  .submit-btn:hover,
+  .action-btn:hover {
+    transform: none;
+  }
+  
+  .nav-item.active {
+    transform: none;
+  }
+  
+  /* Active state for touch feedback */
+  .nav-item:active,
+  .logout-btn:active,
+  .header-btn:active,
+  .submit-btn:active,
+  .action-btn:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+  
+  /* Course cards and job cards touch optimization */
+  .course-card,
+  .job-card,
+  .admission-card {
+    cursor: pointer;
+  }
+  
+  .course-card:active,
+  .job-card:active,
+  .admission-card:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+/* Print Styles */
+@media print {
+  
+  .admin-sidebar,
+  .company-sidebar,
+  .institution-sidebar,
+  .student-sidebar,
+  .logout-section,
+  .header-actions,
+  .quick-actions,
+  .action-buttons {
+    display: none !important;
+  }
+  
+  .admin-content,
+  .company-content,
+  .institution-content,
+  .student-content {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 20px;
+  }
+  
+  .dashboard-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .dashboard-card,
+  .stat-card,
+  .action-card,
+  .auth-box {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  
+  .auth-container {
+    background: linear-gradient(135deg, #0a0a14 0%, #10101a 100%);
+  }
+  
+  .dashboard-card,
+  .auth-box,
+  .stat-card,
+  .action-card {
+    background: rgba(20, 20, 30, 0.95);
+  }
+}
+
+/* Fix for iOS input zoom */
+@media screen and (max-width: 768px) {
+  
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+}
+
+/* Fix for sticky hover on mobile */
+@media (hover: none) and (pointer: coarse) {
+  
+  .nav-item:hover,
+  .logout-btn:hover,
+  .header-btn:hover,
+  .submit-btn:hover,
+  .action-btn:hover,
+  .edit-btn:hover,
+  .delete-btn:hover {
+    background: inherit;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Loading states for mobile */
+.loading-state {
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.loading-state::after {
+  content: '...';
+  animation: dots 1.5s infinite;
+}

@@ -12,7 +12,7 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-import "../styles/Company.css";
+
 
 // Icons
 const HomeIcon = () => <span className="nav-icon">🏠</span>;
